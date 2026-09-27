@@ -1,0 +1,150 @@
+/* Nevona status page - design ported from the approved mock.
+   Tokens mirror the Nevona design system. Loaded last so it fully owns the page. */
+
+:root {
+  --shell: #F7F6F3;
+  --surface: #FFFFFF;
+  --line: #E5E3DE;
+  --ink: #222222;
+  --inkSoft: #4A4A4A;
+  --inkMuted: #8A8A85;
+  --accent: #1A89A9;
+  --success: #027F4B;
+  --failed: #E2435C;
+  --cancelled: #E85D2B; /* degraded / warn */
+  --success-t: rgba(2,127,75,0.10);
+  --failed-t: rgba(226,67,92,0.10);
+  --cancelled-t: rgba(232,93,43,0.10);
+  --mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --shell: #1A1A1A;
+    --surface: #242424;
+    --line: #333330;
+    --ink: #E4E4E1;
+    --inkSoft: #C2C2C2;
+    --inkMuted: #8F8F8A;
+  }
+}
+:root[data-theme="dark"] {
+  --shell: #1A1A1A;
+  --surface: #242424;
+  --line: #333330;
+  --ink: #E4E4E1;
+  --inkSoft: #C2C2C2;
+  --inkMuted: #8F8F8A;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--shell) !important;
+  color: var(--ink) !important;
+  font-family: "Roboto Condensed", "Roboto", Helvetica, Arial, sans-serif !important;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tnum { font-variant-numeric: tabular-nums; }
+svg.lu { stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+.wrap { max-width: 760px; margin: 0 auto; padding: 0 20px 64px; }
+
+/* ---- top bar ---- */
+.top { display: flex; align-items: center; gap: 12px; padding: 26px 0 30px; }
+.top .mark { width: 30px; height: 30px; flex-shrink: 0; display: block; }
+.top .wm { font-size: 20px; font-weight: 800; color: var(--ink); }
+.top .wm span { color: var(--inkMuted); font-weight: 600; }
+
+/* ---- hero (overall) ---- */
+.hero {
+  border: 1px solid var(--line); border-radius: 16px; padding: 26px;
+  display: flex; align-items: center; gap: 18px; margin-bottom: 14px;
+  background: var(--surface);
+}
+.hero .ring {
+  width: 52px; height: 52px; border-radius: 999px; display: grid; place-items: center;
+  background: var(--surface); flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.hero .ring svg { width: 26px; height: 26px; }
+.hero .h1 { font-size: 25px; font-weight: 800; letter-spacing: .005em; color: var(--ink); }
+.hero .h2 { font-size: 14px; color: var(--inkMuted); margin-top: 3px; }
+
+.hero.ok { background: var(--success-t); border-color: color-mix(in srgb, var(--success) 30%, var(--line)); }
+.hero.ok .ring { color: var(--success); }
+.hero.degraded { background: var(--cancelled-t); border-color: color-mix(in srgb, var(--cancelled) 30%, var(--line)); }
+.hero.degraded .ring { color: var(--cancelled); }
+.hero.down { background: var(--failed-t); border-color: color-mix(in srgb, var(--failed) 30%, var(--line)); }
+.hero.down .ring { color: var(--failed); }
+
+/* ---- notice (admin message) ---- */
+.notice {
+  border: 1px solid var(--line); border-left: 3px solid var(--accent);
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 26px; background: var(--surface);
+}
+.notice .nt { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 15px; color: var(--ink); }
+.notice .nt .tag {
+  font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--accent); background: rgba(26,137,169,0.12); border-radius: 5px; padding: 2px 7px;
+}
+.notice .nm { font-size: 14.5px; color: var(--inkSoft); margin-top: 7px; line-height: 1.5; }
+.notice .nd { font-size: 12.5px; color: var(--inkMuted); margin-top: 8px; }
+
+/* ---- section + card ---- */
+.sec-title {
+  font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--inkMuted); margin: 26px 2px 12px;
+}
+.card { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden; }
+
+/* ---- component row ---- */
+.comp { padding: 16px 18px; }
+.comp + .comp { border-top: 1px solid var(--line); }
+.comp .row1 { display: flex; align-items: center; gap: 12px; }
+.comp .nm { font-size: 16px; font-weight: 600; color: var(--ink); }
+.comp .core {
+  font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  border-radius: 5px; padding: 1px 7px;
+}
+.comp .vtag {
+  font-family: var(--mono); font-size: 11px; color: var(--inkMuted);
+  border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px;
+}
+.comp .st { margin-left: auto; display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; }
+.comp .st .d { width: 9px; height: 9px; border-radius: 999px; }
+.comp .up { color: var(--success); }
+.comp .dg { color: var(--cancelled); }
+.comp .dn { color: var(--failed); }
+
+/* ---- 90-day uptime strip ---- */
+.strip { display: flex; gap: 2px; margin-top: 12px; height: 30px; align-items: stretch; }
+.strip i { flex: 1; border-radius: 2px; background: var(--success); min-width: 2px; }
+.strip i.dg { background: var(--cancelled); }
+.strip i.dn { background: var(--failed); }
+.strip-legend { display: flex; justify-content: space-between; font-size: 12px; color: var(--inkMuted); margin-top: 6px; }
+
+/* ---- incidents ---- */
+.inc { padding: 16px 18px; }
+.inc + .inc { border-top: 1px solid var(--line); }
+.inc .ih { display: flex; align-items: center; gap: 10px; }
+.inc .pill { font-size: 12.5px; font-weight: 600; border-radius: 6px; padding: 2px 9px; }
+.inc .pill.res { color: var(--success); background: var(--success-t); }
+.inc .pill.mon { color: var(--cancelled); background: var(--cancelled-t); }
+.inc .it { font-weight: 600; font-size: 15.5px; color: var(--ink); }
+.inc .idt { margin-left: auto; font-size: 12.5px; color: var(--inkMuted); white-space: nowrap; }
+.inc .im { font-size: 14px; color: var(--inkSoft); margin-top: 7px; line-height: 1.5; }
+
+.foot { text-align: center; color: var(--inkMuted); font-size: 13px; margin-top: 40px; }
+
+/* ---- theme toggle (fixed top-right, like the mock) ---- */
+.theme-toggle {
+  position: fixed; top: 16px; right: 16px; width: 34px; height: 34px;
+  border-radius: 8px; border: 1px solid var(--line); background: var(--surface);
+  display: grid; place-items: center; color: var(--inkSoft); cursor: pointer; padding: 0; z-index: 10;
+}
+.theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+.theme-toggle svg { width: 18px; height: 18px; }

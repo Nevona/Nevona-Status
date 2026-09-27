@@ -1,19 +1,66 @@
 owner: Nevona
 repo: Nevona-Status
 
+# `group`, `core` and `tag` are read only by the Nevona status page (status-page/scripts/build-data.mjs).
 sites:
-  - name: Google
-    url: https://www.google.com
+  - name: API & dashboard
+    slug: api-dashboard
+    url: https://prod.nevona.ai
+    core: true
+  - name: Dev environment
+    slug: dev-environment
+    url: https://dev.nevona.ai
+  - name: Marketing site
+    slug: marketing-site
+    url: https://nevona.ai
+  - name: Documentation
+    slug: documentation
+    url: https://docs.nevona.ai
+  - name: Claude
+    slug: claude
+    url: https://www.anthropic.com
+    group: vendor
+    tag: anthropic
+    core: true
+  - name: Google Cloud
+    slug: google-cloud
+    url: https://cloud.google.com
+    group: vendor
+    tag: gcp
+  - name: Modal
+    slug: modal
+    url: https://modal.com
+    group: vendor
+    tag: modal
+  - name: Clerk
+    slug: clerk
+    url: https://clerk.com
+    group: vendor
+    tag: clerk
 
 status-website:
   cname: status.nevona.ai
-  name: Nevona Status
-  introTitle: "**Nevona** system status"
-  introMessage: Live uptime and incident history for Nevona services.
-  navbar:
-    - title: Status
-      href: /
-    - title: GitHub
-      href: https://github.com/$OWNER/$REPO
+  name: Nevona
+  logoUrl: /nevona-mark.svg
+  favicon: /nevona-mark.svg
+  faviconSvg: /nevona-mark.svg
+  introTitle: Nevona platform status
+  introMessage: Live health of the Nevona platform and its services. Refreshed every few minutes.
+  theme: default
+
+# Sentence case everywhere (Nevona casing law - no Title Case).
+i18n:
+  liveStatus: Live status
+  activeIncidents: Active incidents
+  pastIncidents: Past incidents
+  allSystemsOperational: All systems operational
+  scheduledMaintenance: Scheduled maintenance
+  pastScheduledMaintenance: Past scheduled maintenance
+  incidentDetails: Incident details
+  incidentViewOnGitHub: View and subscribe on GitHub
+  overallUptimeTitle: Overall uptime
+  averageResponseTimeTitle: Average response
+  lastUpdated: Last updated
+  lastUpdatedJustNow: just now
 
 # See https://upptime.js.org/docs/configuration
