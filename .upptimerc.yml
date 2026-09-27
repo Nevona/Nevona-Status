@@ -6,7 +6,7 @@ sites:
     url: https://www.google.com
 
 status-website:
-  baseUrl: /Nevona-Status
+  cname: status.nevona.ai
   name: Nevona Status
   introTitle: "**Nevona** system status"
   introMessage: Live uptime and incident history for Nevona services.
