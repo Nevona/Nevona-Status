@@ -49,15 +49,15 @@ sites:
     group: vendor
     core: true
   # incidents.json can't express "active and severe" as a substring; the dashboard's own banner does.
-  - name: Hosting
-    slug: hosting
+  - name: Cloud hosting
+    slug: cloud-hosting
     url: https://status.cloud.google.com/
     expectedStatusCodes: [200]
     __dangerous__body_degraded_if_text_missing: "No broad severe incidents"
     group: vendor
   # Better Stack page; the page and each active report carry an aggregate_state.
-  - name: Compute
-    slug: compute
+  - name: Workflow compute
+    slug: workflow-compute
     url: https://status.modal.com/index.json
     expectedStatusCodes: [200]
     __dangerous__body_down: '"aggregate_state":"downtime"'
