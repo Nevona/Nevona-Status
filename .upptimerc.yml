@@ -24,12 +24,6 @@ sites:
     expectedStatusCodes: [200]
     __dangerous__body_down_if_text_missing: '"status":"ok"'
     core: true
-  - name: Sign-in
-    slug: sign-in
-    url: https://clerk.nevona.ai/v1/health
-    expectedStatusCodes: [200]
-    __dangerous__body_down_if_text_missing: '"status":"healthy"'
-    core: true
   # The worker controller speaks only gRPC; a plain GET getting its 415 proves it's serving (the LB would 502/503).
   - name: Endpoint connectivity
     slug: endpoint-connectivity
@@ -46,8 +40,8 @@ sites:
     slug: documentation
     url: https://docs.nevona.ai
   # Only the "Claude API (api.anthropic.com)" component - claude.ai or Claude Code incidents don't affect Nevona.
-  - name: AI model provider
-    slug: ai-model-provider
+  - name: LLM
+    slug: llm
     url: https://status.claude.com/api/v2/components/k8w3r06qmzrp.json
     expectedStatusCodes: [200]
     __dangerous__body_down: '_outage"' # partial_outage or major_outage
@@ -55,23 +49,23 @@ sites:
     group: vendor
     core: true
   # incidents.json can't express "active and severe" as a substring; the dashboard's own banner does.
-  - name: Cloud hosting
-    slug: cloud-hosting
+  - name: Hosting
+    slug: hosting
     url: https://status.cloud.google.com/
     expectedStatusCodes: [200]
     __dangerous__body_degraded_if_text_missing: "No broad severe incidents"
     group: vendor
   # Better Stack page; the page and each active report carry an aggregate_state.
-  - name: Workflow compute
-    slug: workflow-compute
+  - name: Compute
+    slug: compute
     url: https://status.modal.com/index.json
     expectedStatusCodes: [200]
     __dangerous__body_down: '"aggregate_state":"downtime"'
     __dangerous__body_degraded: '"aggregate_state":"degraded"'
     group: vendor
   # Statuspage-style indicator: critical = major outage, major = partial outage, minor is ignored as noise.
-  - name: Identity provider
-    slug: identity-provider
+  - name: Sign-in
+    slug: sign-in-provider
     url: https://status.clerk.com/api/v2/status.json
     expectedStatusCodes: [200]
     __dangerous__body_down: '"indicator":"critical"'
