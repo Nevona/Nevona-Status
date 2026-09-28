@@ -51,7 +51,8 @@
 
   const load = async (path, fallback) => {
     try {
-      return await fetch(path).then((response) => response.json());
+      // Pages caches files for 10 min; the timestamp skips that cache so status is always fresh.
+      return await fetch(`${path}?t=${Date.now()}`, { cache: "no-store" }).then((response) => response.json());
     } catch (error) {
       return fallback;
     }
