@@ -1,10 +1,10 @@
 [
   {
     "name": "API & dashboard",
-    "url": "https://prod.nevona.ai",
-    "icon": "https://icons.duckduckgo.com/ip3/prod.nevona.ai.ico",
+    "url": "https://prod.nevona.aii",
+    "icon": "https://icons.duckduckgo.com/ip3/prod.nevona.aii.ico",
     "slug": "api-dashboard",
-    "status": "up",
+    "status": "down",
     "uptime": "100.00%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
