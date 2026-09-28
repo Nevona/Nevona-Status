@@ -86,7 +86,7 @@ sites:
   - name: Alert test
     slug: alert-test
     url: https://docs.nevona.ai
-    expectedStatusCodes: [599]
+    expectedStatusCodes: [200]
 
 status-website:
   cname: status.nevona.ai
