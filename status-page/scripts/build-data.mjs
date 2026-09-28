@@ -18,6 +18,7 @@ const GITHUB_HEADERS = {
   Accept: "application/vnd.github+json",
   ...(process.env.GITHUB_TOKEN && { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }),
 };
+const TEAM_ASSOCIATIONS = new Set(["OWNER", "MEMBER", "COLLABORATOR"]);
 
 const readJson = async (path, fallback) => {
   try {
@@ -34,6 +35,9 @@ const readHistory = async (slug) => {
     return {};
   }
 };
+
+// The repo is public, so only issues and comments from the Nevona team may reach the page.
+const isFromTeam = (item) => TEAM_ASSOCIATIONS.has(item.author_association);
 
 const formatUptime = (uptime) => (!uptime || uptime === "100.00%" ? "100%" : uptime);
 
@@ -107,7 +111,7 @@ const fetchIncidents = async (owner, repo) => {
     );
     if (!response.ok) throw new Error(`GitHub API ${response.status}`);
 
-    const issues = (await response.json()).filter((issue) => !issue.pull_request);
+    const issues = (await response.json()).filter((issue) => !issue.pull_request && isFromTeam(issue));
     return Promise.all(issues.map(toIncident));
   } catch (error) {
     console.warn(`incidents skipped: ${error.message}`);
@@ -136,14 +140,16 @@ const formatIncidentDate = (issue) => {
   return `${created.toLocaleDateString("en-GB", { day: "numeric", month: "short" })} · ${duration}`;
 };
 
-// The team's latest comment on the issue is the incident update; bot comments are skipped.
+// The team's latest comment is the incident update; Upptime's own "**Resolved:**" comment is skipped.
 const latestUpdate = async (issue) => {
   if (!issue.comments) return "";
 
   const response = await fetch(issue.comments_url, { headers: GITHUB_HEADERS });
   if (!response.ok) return "";
 
-  const comments = (await response.json()).filter((comment) => comment.user.type !== "Bot");
+  const comments = (await response.json()).filter(
+    (comment) => isFromTeam(comment) && !comment.body.startsWith("**Resolved:**"),
+  );
   return comments.length ? comments[comments.length - 1].body.trim() : "";
 };
 
