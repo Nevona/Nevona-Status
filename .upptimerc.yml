@@ -83,6 +83,10 @@ sites:
     __dangerous__body_degraded: '"indicator":"major"'
     group: vendor
     tag: clerk
+  - name: Alert test
+    slug: alert-test
+    url: https://docs.nevona.ai
+    expectedStatusCodes: [599]
 
 status-website:
   cname: status.nevona.ai
