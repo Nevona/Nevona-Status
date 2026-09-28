@@ -40,7 +40,7 @@ sites:
 
 status-website:
   cname: status.nevona.ai
-  name: Nevona
+  name: Nevona Status
   logoUrl: /nevona-mark.svg
   favicon: /nevona-mark.svg
   faviconSvg: /nevona-mark.svg
