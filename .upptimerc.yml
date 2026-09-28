@@ -7,8 +7,9 @@ secrets:
   - NOTIFICATION_SLACK
   - NOTIFICATION_SLACK_WEBHOOK_URL
 
-# `group`, `core` and `tag` are read only by the Nevona status page (status-page/scripts/build-data.mjs).
+# `group` and `core` are read only by the Nevona status page (status-page/scripts/build-data.mjs).
 # Vendors are probed on their own status APIs, so a vendor-reported incident shows here, not just reachability.
+# Vendor names stay generic on the page (no `tag`), so the page doesn't advertise our providers.
 # Upptime matches bodies by substring: `__dangerous__body_down` / `__dangerous__body_degraded` flip a 200 to down / degraded.
 sites:
   - name: Web app
@@ -22,12 +23,6 @@ sites:
     url: https://api.prod.nevona.ai/health
     expectedStatusCodes: [200]
     __dangerous__body_down_if_text_missing: '"status":"ok"'
-    core: true
-  - name: Sign-in
-    slug: sign-in
-    url: https://clerk.nevona.ai/v1/health
-    expectedStatusCodes: [200]
-    __dangerous__body_down_if_text_missing: '"status":"healthy"'
     core: true
   # The worker controller speaks only gRPC; a plain GET getting its 415 proves it's serving (the LB would 502/503).
   - name: Endpoint connectivity
@@ -44,45 +39,38 @@ sites:
   - name: Documentation
     slug: documentation
     url: https://docs.nevona.ai
-  - name: Marketing site
-    slug: marketing-site
-    url: https://nevona.ai
   # Only the "Claude API (api.anthropic.com)" component - claude.ai or Claude Code incidents don't affect Nevona.
-  - name: Claude
-    slug: claude
+  - name: LLM
+    slug: llm
     url: https://status.claude.com/api/v2/components/k8w3r06qmzrp.json
     expectedStatusCodes: [200]
     __dangerous__body_down: '_outage"' # partial_outage or major_outage
     __dangerous__body_degraded: '"status":"degraded_performance"'
     group: vendor
-    tag: anthropic
     core: true
   # incidents.json can't express "active and severe" as a substring; the dashboard's own banner does.
-  - name: Google Cloud
-    slug: google-cloud
+  - name: Cloud hosting
+    slug: cloud-hosting
     url: https://status.cloud.google.com/
     expectedStatusCodes: [200]
     __dangerous__body_degraded_if_text_missing: "No broad severe incidents"
     group: vendor
-    tag: gcp
   # Better Stack page; the page and each active report carry an aggregate_state.
-  - name: Modal
-    slug: modal
+  - name: Workflow compute
+    slug: workflow-compute
     url: https://status.modal.com/index.json
     expectedStatusCodes: [200]
     __dangerous__body_down: '"aggregate_state":"downtime"'
     __dangerous__body_degraded: '"aggregate_state":"degraded"'
     group: vendor
-    tag: modal
   # Statuspage-style indicator: critical = major outage, major = partial outage, minor is ignored as noise.
-  - name: Clerk
-    slug: clerk
+  - name: Sign-in
+    slug: sign-in-provider
     url: https://status.clerk.com/api/v2/status.json
     expectedStatusCodes: [200]
     __dangerous__body_down: '"indicator":"critical"'
     __dangerous__body_degraded: '"indicator":"major"'
     group: vendor
-    tag: clerk
   - name: Alert test
     slug: alert-test
     url: https://docs.nevona.ai
