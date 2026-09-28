@@ -1,7 +1,7 @@
-url: https://clerk.com
+url: https://status.clerk.com/api/v2/status.json
 status: up
 code: 200
-responseTime: 221
-lastUpdated: 2026-09-28T07:09:59.885Z
+responseTime: 362
+lastUpdated: 2026-09-28T08:10:52.099Z
 startTime: 2026-09-27T15:13:06.828Z
 generator: Upptime <https://github.com/upptime/upptime>

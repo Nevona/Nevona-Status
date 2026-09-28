@@ -1,7 +1,7 @@
-url: https://www.anthropic.com
+url: https://status.claude.com/api/v2/components/k8w3r06qmzrp.json
 status: up
 code: 200
-responseTime: 100
-lastUpdated: 2026-09-28T07:09:59.257Z
+responseTime: 404
+lastUpdated: 2026-09-28T08:10:49.643Z
 startTime: 2026-09-27T15:13:05.416Z
 generator: Upptime <https://github.com/upptime/upptime>
