@@ -86,23 +86,6 @@ const buildSites = async (config, summary) => {
   return { services, vendors };
 };
 
-// history/<slug>.yml is only rewritten when a status changes, so the last check is the last Uptime CI run.
-const fetchLastCheck = async (owner, repo) => {
-  try {
-    const response = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/actions/workflows/uptime.yml/runs?status=success&per_page=1`,
-      { headers: GITHUB_HEADERS },
-    );
-    if (!response.ok) throw new Error(`GitHub API ${response.status}`);
-
-    const [run] = (await response.json()).workflow_runs;
-    return run ? run.updated_at : null;
-  } catch (error) {
-    console.warn(`last check time skipped: ${error.message}`);
-    return null;
-  }
-};
-
 const fetchIncidents = async (owner, repo) => {
   try {
     const response = await fetch(
@@ -162,5 +145,6 @@ await writeFile(join(dataDir, "services.json"), JSON.stringify(services, null, 2
 await writeFile(join(dataDir, "vendors.json"), JSON.stringify(vendors, null, 2));
 await writeFile(join(dataDir, "incidents.json"), JSON.stringify(await fetchIncidents(config.owner, config.repo), null, 2));
 await writeFile(join(dataDir, "notice.json"), JSON.stringify(await readJson(join(repoRoot, "notice.json"), null), null, 2));
-await writeFile(join(dataDir, "meta.json"), JSON.stringify({ updatedAt: await fetchLastCheck(config.owner, config.repo) }, null, 2));
+// Status Page CI rebuilds on every change the page shows (probe run, config/notice push, incident edit), so build time is the last update.
+await writeFile(join(dataDir, "meta.json"), JSON.stringify({ updatedAt: new Date().toISOString() }, null, 2));
 console.log(`wrote ${services.length} services, ${vendors.length} vendors to ${dataDir}`);
