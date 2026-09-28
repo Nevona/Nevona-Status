@@ -19,6 +19,7 @@ const GITHUB_HEADERS = {
   ...(process.env.GITHUB_TOKEN && { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }),
 };
 const TEAM_ASSOCIATIONS = new Set(["OWNER", "MEMBER", "COLLABORATOR"]);
+const TEAM_APPS = new Set(["nevona-status-admin[bot]"]); // apps post as <slug>[bot] with no team association
 
 const readJson = async (path, fallback) => {
   try {
@@ -37,7 +38,7 @@ const readHistory = async (slug) => {
 };
 
 // The repo is public, so only issues and comments from the Nevona team may reach the page.
-const isFromTeam = (item) => TEAM_ASSOCIATIONS.has(item.author_association);
+const isFromTeam = (item) => TEAM_ASSOCIATIONS.has(item.author_association) || TEAM_APPS.has(item.user.login);
 
 const formatUptime = (uptime) => (!uptime || uptime === "100.00%" ? "100%" : uptime);
 
