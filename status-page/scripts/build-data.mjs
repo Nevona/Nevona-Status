@@ -14,6 +14,10 @@ const dataDir = join(pageRoot, "static", "data");
 const SERVICE_LABELS = { up: "Operational", degraded: "Degraded", down: "Down" };
 const VENDOR_LABELS = { up: "Operational", degraded: "Elevated latency", down: "Outage" };
 const DOWN_MINUTES = 30; // a day with this much downtime shows red; less shows orange
+const GITHUB_HEADERS = {
+  Accept: "application/vnd.github+json",
+  ...(process.env.GITHUB_TOKEN && { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }),
+};
 
 const readJson = async (path, fallback) => {
   try {
@@ -47,13 +51,11 @@ const dayStrip = (dailyMinutesDown = {}) => {
 const buildSites = async (config, summary) => {
   const services = [];
   const vendors = [];
-  let updatedAt = null;
 
   for (const site of config.sites || []) {
     const history = await readHistory(site.slug);
     const record = summary.find((entry) => entry.slug === site.slug) || {};
     const status = history.status || record.status || "up";
-    if (history.lastUpdated && (!updatedAt || history.lastUpdated > updatedAt)) updatedAt = history.lastUpdated;
 
     if (site.group === "vendor") {
       vendors.push({
@@ -77,33 +79,47 @@ const buildSites = async (config, summary) => {
     });
   }
 
-  return { services, vendors, updatedAt };
+  return { services, vendors };
+};
+
+// history/<slug>.yml is only rewritten when a status changes, so the last check is the last Uptime CI run.
+const fetchLastCheck = async (owner, repo) => {
+  try {
+    const response = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/actions/workflows/uptime.yml/runs?status=success&per_page=1`,
+      { headers: GITHUB_HEADERS },
+    );
+    if (!response.ok) throw new Error(`GitHub API ${response.status}`);
+
+    const [run] = (await response.json()).workflow_runs;
+    return run ? run.updated_at : null;
+  } catch (error) {
+    console.warn(`last check time skipped: ${error.message}`);
+    return null;
+  }
 };
 
 const fetchIncidents = async (owner, repo) => {
-  const headers = { Accept: "application/vnd.github+json" };
-  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-
   try {
     const response = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/issues?state=all&labels=status&per_page=10`,
-      { headers },
+      { headers: GITHUB_HEADERS },
     );
     if (!response.ok) throw new Error(`GitHub API ${response.status}`);
 
     const issues = (await response.json()).filter((issue) => !issue.pull_request);
-    return Promise.all(issues.map((issue) => toIncident(issue, headers)));
+    return Promise.all(issues.map(toIncident));
   } catch (error) {
     console.warn(`incidents skipped: ${error.message}`);
     return [];
   }
 };
 
-const toIncident = async (issue, headers) => ({
+const toIncident = async (issue) => ({
   status: issue.state === "closed" ? "resolved" : "monitoring",
   title: issue.title.replace(/🛑|⚠️|🟥|🟨/gu, "").trim(),
   date: formatIncidentDate(issue),
-  message: await latestUpdate(issue, headers),
+  message: await latestUpdate(issue),
 });
 
 // Open: "Today, 14:02 UTC". Closed: "31 Aug · 47m".
@@ -121,10 +137,10 @@ const formatIncidentDate = (issue) => {
 };
 
 // The team's latest comment on the issue is the incident update; bot comments are skipped.
-const latestUpdate = async (issue, headers) => {
+const latestUpdate = async (issue) => {
   if (!issue.comments) return "";
 
-  const response = await fetch(issue.comments_url, { headers });
+  const response = await fetch(issue.comments_url, { headers: GITHUB_HEADERS });
   if (!response.ok) return "";
 
   const comments = (await response.json()).filter((comment) => comment.user.type !== "Bot");
@@ -133,12 +149,12 @@ const latestUpdate = async (issue, headers) => {
 
 const config = load(await readFile(join(repoRoot, ".upptimerc.yml"), "utf8"));
 const summary = await readJson(join(repoRoot, "history", "summary.json"), []);
-const { services, vendors, updatedAt } = await buildSites(config, summary);
+const { services, vendors } = await buildSites(config, summary);
 
 await mkdir(dataDir, { recursive: true });
 await writeFile(join(dataDir, "services.json"), JSON.stringify(services, null, 2));
 await writeFile(join(dataDir, "vendors.json"), JSON.stringify(vendors, null, 2));
 await writeFile(join(dataDir, "incidents.json"), JSON.stringify(await fetchIncidents(config.owner, config.repo), null, 2));
 await writeFile(join(dataDir, "notice.json"), JSON.stringify(await readJson(join(repoRoot, "notice.json"), null), null, 2));
-await writeFile(join(dataDir, "meta.json"), JSON.stringify({ updatedAt: updatedAt || new Date().toISOString() }, null, 2));
+await writeFile(join(dataDir, "meta.json"), JSON.stringify({ updatedAt: await fetchLastCheck(config.owner, config.repo) }, null, 2));
 console.log(`wrote ${services.length} services, ${vendors.length} vendors to ${dataDir}`);

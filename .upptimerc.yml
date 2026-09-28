@@ -5,7 +5,7 @@ repo: Nevona-Status
 sites:
   - name: API & dashboard
     slug: api-dashboard
-    url: https://prod.nevona.ai
+    url: https://prod.nevona.aii
     core: true
   - name: Dev environment
     slug: dev-environment
