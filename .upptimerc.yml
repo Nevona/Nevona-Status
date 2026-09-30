@@ -71,10 +71,6 @@ sites:
     __dangerous__body_down: '"indicator":"critical"'
     __dangerous__body_degraded: '"indicator":"major"'
     group: vendor
-  - name: Alert test
-    slug: alert-test
-    url: https://docs.nevona.ai
-    expectedStatusCodes: [200]
 
 status-website:
   cname: status.nevona.ai
