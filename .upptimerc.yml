@@ -73,7 +73,7 @@ sites:
     group: vendor
   - name: Alert test
     slug: alert-test
-    url: https://docs.nevona.ai
+    url: https://docs.nevona.ai/alert-test-404
     expectedStatusCodes: [200]
 
 status-website:
