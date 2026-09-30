@@ -1,7 +1,7 @@
-url: https://docs.nevona.ai/alert-test-404
-status: down
-code: 404
-responseTime: 14
-lastUpdated: 2026-09-30T09:23:07.717Z
+url: https://docs.nevona.ai
+status: up
+code: 200
+responseTime: 107
+lastUpdated: 2026-09-30T09:24:36.847Z
 startTime: 2026-09-28T08:30:14.509Z
 generator: Upptime <https://github.com/upptime/upptime>
