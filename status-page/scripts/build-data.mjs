@@ -124,17 +124,22 @@ const formatIncidentDate = (issue) => {
   return `${created.toLocaleDateString("en-GB", { day: "numeric", month: "short" })} · ${duration}`;
 };
 
-// The team's latest comment is the incident update; Upptime's own "**Resolved:**" comment is skipped.
+// Upptime opens incidents with a site label and writes raw probe results as the opening message.
+const isOpenedByUpptime = (issue) => issue.labels.some((label) => label.name !== "status");
+
+// The team's latest comment is the incident update, or the opening message until there is one.
+// Upptime's own "**Resolved:**" comment is skipped.
 const latestUpdate = async (issue) => {
-  if (!issue.comments) return "";
+  const opening = isOpenedByUpptime(issue) ? "" : (issue.body ?? "").trim();
+  if (!issue.comments) return opening;
 
   const response = await fetch(issue.comments_url, { headers: GITHUB_HEADERS });
-  if (!response.ok) return "";
+  if (!response.ok) return opening;
 
   const comments = (await response.json()).filter(
     (comment) => isFromTeam(comment) && !comment.body.startsWith("**Resolved:**"),
   );
-  return comments.length ? comments[comments.length - 1].body.trim() : "";
+  return comments.length ? comments[comments.length - 1].body.trim() : opening;
 };
 
 const config = load(await readFile(join(repoRoot, ".upptimerc.yml"), "utf8"));
