@@ -1,11 +1,9 @@
 owner: Nevona
 repo: Nevona-Status
 
-# Slack alerts to #alerts. The webhook URL is a repo secret and the webhook itself fixes the channel.
 # This list is authoritative: only these secrets reach the Uptime CI run (GH_PAT is passed separately).
-secrets:
-  - NOTIFICATION_SLACK
-  - NOTIFICATION_SLACK_WEBHOOK_URL
+# Empty, so Upptime sends no alerts itself: .github/workflows/incident-alerts.yml posts them to Slack.
+secrets: []
 
 # `group` and `core` are read only by the Nevona status page (status-page/scripts/build-data.mjs).
 # Vendors are probed on their own status APIs, so a vendor-reported incident shows here, not just reachability.
