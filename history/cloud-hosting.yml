@@ -1,7 +1,7 @@
 url: https://status.cloud.google.com/
-status: up
+status: degraded
 code: 200
-responseTime: 68
-lastUpdated: 2026-10-07T23:10:01.690Z
+responseTime: 152
+lastUpdated: 2026-10-08T18:40:09.161Z
 startTime: 2026-09-28T09:13:14.477Z
 generator: Upptime <https://github.com/upptime/upptime>
