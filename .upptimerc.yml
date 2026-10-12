@@ -28,12 +28,6 @@ sites:
     url: https://workers.prod.nevona.ai/
     expectedStatusCodes: [415]
     core: true
-  # The egress proxy answers a plain GET with a 400 and this text (services/proxy/src/servers/proxy/handle.go).
-  - name: Integrations
-    slug: integrations
-    url: https://proxy.prod.nevona.ai/
-    expectedStatusCodes: [400]
-    __dangerous__body_down_if_text_missing: "This is a proxy"
   - name: Documentation
     slug: documentation
     url: https://docs.nevona.ai
