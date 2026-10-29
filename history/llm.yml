@@ -1,7 +1,7 @@
 url: https://status.claude.com/api/v2/components/k8w3r06qmzrp.json
-status: up
-code: 200
-responseTime: 1073
-lastUpdated: 2026-10-28T23:07:44.419Z
+status: down
+code: 503
+responseTime: 244
+lastUpdated: 2026-10-29T03:39:52.707Z
 startTime: 2026-09-28T09:16:52.352Z
 generator: Upptime <https://github.com/upptime/upptime>
