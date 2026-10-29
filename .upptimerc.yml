@@ -28,9 +28,12 @@ sites:
     url: https://workers.prod.nevona.ai/
     expectedStatusCodes: [415]
     core: true
+  # Docs are signed-in only (monorepo #2097): a 401 with the sign-in page proves the docs server is serving.
   - name: Documentation
     slug: documentation
     url: https://docs.nevona.ai
+    expectedStatusCodes: [401]
+    __dangerous__body_down_if_text_missing: "Nevona documentation"
   # Only the "Claude API (api.anthropic.com)" component - claude.ai or Claude Code incidents don't affect Nevona.
   - name: LLM
     slug: llm
