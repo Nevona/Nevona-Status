@@ -1,7 +1,7 @@
 url: https://status.modal.com/index.json
-status: up
+status: degraded
 code: 200
-responseTime: 842
-lastUpdated: 2026-11-12T23:06:07.685Z
+responseTime: 590
+lastUpdated: 2026-11-13T19:37:12.647Z
 startTime: 2026-09-28T09:13:14.966Z
 generator: Upptime <https://github.com/upptime/upptime>
