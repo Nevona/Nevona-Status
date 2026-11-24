@@ -83,17 +83,17 @@
     "url": "https://status.claude.com/api/v2/components/k8w3r06qmzrp.json",
     "icon": "https://icons.duckduckgo.com/ip3/status.claude.com.ico",
     "slug": "llm",
-    "status": "down",
-    "uptime": "99.11%",
-    "uptimeDay": "99.99%",
-    "uptimeWeek": "99.68%",
-    "uptimeMonth": "99.15%",
-    "uptimeYear": "99.11%",
-    "time": 1240,
-    "timeDay": 243,
-    "timeWeek": 282,
-    "timeMonth": 554,
-    "timeYear": 1240,
+    "status": "up",
+    "uptime": "99.10%",
+    "uptimeDay": "99.49%",
+    "uptimeWeek": "99.61%",
+    "uptimeMonth": "99.13%",
+    "uptimeYear": "99.10%",
+    "time": 1231,
+    "timeDay": 262,
+    "timeWeek": 283,
+    "timeMonth": 549,
+    "timeYear": 1231,
     "dailyMinutesDown": {
       "2026-09-29": 123,
       "2026-10-01": 127,
@@ -109,7 +109,7 @@
       "2026-11-16": 78,
       "2026-11-19": 19,
       "2026-11-23": 13,
-      "2026-11-24": 0
+      "2026-11-24": 7
     }
   },
   {
